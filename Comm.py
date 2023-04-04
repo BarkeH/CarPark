@@ -1,6 +1,32 @@
 import serial
 import time
 
+ser = serial.Serial('/dev/ttyACM0', 9600, timeout=1)
+ser.reset_input_buffer()
+
+time.sleep(2)
+
+def getPayment(price):
+    ser.write(b"gate,close\n")
+    ser.write(b"pay,$" + str(price).encode('utf-8') + b"\n")
+    
+    for i in range(5):
+        time.sleep(1)
+        if ser.in_waiting > 0:
+            line = ser.readline().decode('utf-8').rstrip()
+            print(line)
+    ser.write(b"gate,open\n")
+    ser.write(b"pay,\n")
+    for i in range(5):
+        time.sleep(1)
+        if ser.in_waiting > 0:
+            line = ser.readline().decode('utf-8').rstrip()
+            print(line)
+    
+    #collect payment code
+
+
+
 if __name__ == '__main__':
     
     # Setup serial communication 

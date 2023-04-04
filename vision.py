@@ -6,14 +6,35 @@ import os, sys, inspect #For dynamic filepaths
 import numpy as np;	
 import re
 import time
+import Comm
 
+timeEntered = 0
 cam = cv2.VideoCapture(0)
+
+carsList = []
+class carInPark:
+    def __init__(self, licensePlate, timeEntered, isACT):
+        self.licensePlate = licensePlate
+        self.timeEntered = timeEntered
+        self.isACT = isACT
+    
+ 
+def killCar(licensePlate):
+    for car in carsList:
+        if (car.licensePlate == licensePlate):
+            print("killed: " + licensePlate)
+            print(car.isACT)
+            carsList.remove(car)
+            Comm.getPayment(16.50)
 
 def predominantColour(img):
     a2D = img.reshape(-1, img.shape[-1])
     col_range = (256,256,256)
     a1D = np.ravel_multi_index(a2D.T, col_range)
-    return np.unravel_index(np.bincount(a1D).argmax(), col_range)
+    colours = np.unravel_index(np.bincount(a1D).argmax(), col_range)
+    if (colours[0] + colours[1] + colours[2] < 600):
+        return False
+    return True
 
 while True:
     check, frame = cam.read()
@@ -61,10 +82,17 @@ while True:
         cv2.imshow("cropped", cropped)
         print(text)
 
-        x = img[y:y+h,x:x+w]
-        cv2.imshow("colour",x)
-        print(predominantColour(x))
-    
+        colourCropped = img[y:y+h,x:x+w]
+        cv2.imshow("colour",colourCropped)
+        if (x < 160):
+            print("exit")
+            killCar(text)
+        elif (time.time() - timeEntered > 5):
+            print("entered")
+            newCar = carInPark(text, time.time(), predominantColour(colourCropped))
+            carsList.append(newCar)
+            timeEntered = time.time()
+
 
     # Output
     #cv2.imshow("Threshold", img3)
