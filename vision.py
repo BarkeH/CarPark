@@ -9,6 +9,12 @@ import time
 
 cam = cv2.VideoCapture(0)
 
+def predominantColour(img):
+    a2D = img.reshape(-1, img.shape[-1])
+    col_range = (256,256,256)
+    a1D = np.ravel_multi_index(a2D.T, col_range)
+    return np.unravel_index(np.bincount(a1D).argmax(), col_range)
+
 while True:
     check, frame = cam.read()
 
@@ -29,7 +35,6 @@ while True:
     cv2.drawContours(cntsImageCopy, cnts, -1, (0, 255, 0), 3)
 
     i = 7
-    start_time = time.time() 
     for c in cnts:
         perimeter = cv2.arcLength(c, True)
         approx = cv2.approxPolyDP(c, 0.018 * perimeter, True)
@@ -42,7 +47,7 @@ while True:
             continue
         cropped = img2[y:y+h,x:x+w]
    
-        cropped3 = cv2.threshold(cropped, 130, 255, cv2.THRESH_BINARY)[1]
+        cropped3 = cv2.threshold(cropped, 120, 255, cv2.THRESH_BINARY)[1]
         cropped4 = cv2.GaussianBlur(cropped3, (1, 1), 0)
         
         cv2.imshow("threshold", cropped3)
@@ -55,8 +60,11 @@ while True:
             continue
         cv2.imshow("cropped", cropped)
         print(text)
+
+        x = img[y:y+h,x:x+w]
+        cv2.imshow("colour",x)
+        print(predominantColour(x))
     
-    print("--- %s seconds ---" % (time.time() - start_time))
 
     # Output
     #cv2.imshow("Threshold", img3)
