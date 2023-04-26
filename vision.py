@@ -55,7 +55,6 @@ while True:
     screenCnt = None
     cv2.drawContours(cntsImageCopy, cnts, -1, (0, 255, 0), 3)
 
-    i = 7
     for c in cnts:
         perimeter = cv2.arcLength(c, True)
         approx = cv2.approxPolyDP(c, 0.018 * perimeter, True)
