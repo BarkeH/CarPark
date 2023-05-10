@@ -6,11 +6,18 @@ db = client.CarPark
 collection = db.licencePlates
 cars = collection.find()
 
-car_list = []
 for car in cars:
-    car_list.append(car)
-
-car_list = json.dumps(car_list, default=json_util.default)
+    print(car)
 
 
-print(car_list)
+if input("type something to remove an element: "):
+    plate = input("licence Plate: ")
+    
+    deleteObject = {"plate":plate}
+
+    collection.delete_one(deleteObject)
+
+for car in collection.find():
+    print(car)
+
+
