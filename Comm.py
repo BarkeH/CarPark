@@ -1,5 +1,6 @@
 import serial
 import time
+import paymentProcessor
 
 ser = serial.Serial('/dev/ttyACM0', 9600, timeout=1)
 ser.reset_input_buffer()
@@ -10,11 +11,16 @@ def getPayment(price):
     ser.write(b"gate,close\n")
     ser.write(b"pay,$" + str(price).encode('utf-8') + b"\n")
     
-    for i in range(5):
-        time.sleep(1)
-        if ser.in_waiting > 0:
-            line = ser.readline().decode('utf-8').rstrip()
-            print(line)
+    if ser.in_waiting > 0:
+        line = ser.readline().decode('utf-8').rstrip()
+        print(line)
+    
+    while True:
+        response = paymentProcessor.sendPayment(price)
+        if response["success"] == True:
+            break
+        
+
     ser.write(b"gate,open\n")
     ser.write(b"pay,\n")
     for i in range(5):
