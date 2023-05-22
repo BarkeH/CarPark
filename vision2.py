@@ -75,8 +75,9 @@ while True:
             print("exit")
             exists = mongoHandler.getWholeCar(text)
             if exists:
-                print("killed")
-                Comm.getPayment(16.50)
+                totalTime = exists["time"] - time.time()
+                owed = int(totalTime/20)
+                Comm.getPayment(owed)
                 mongoHandler.deleteCarByPlate(text)
         elif (time.time() - timeEntered > 5):
             print("entered")

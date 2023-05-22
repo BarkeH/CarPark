@@ -1,8 +1,8 @@
 from pymongo import MongoClient 
 
 client = MongoClient('mongodb://root:password@localhost:27017/')
-db = client.bank
-collection = db
+db = client.licence
+collection = db.licence
 
 def deleteCarByPlate(plate):
     deleteObject = {"plate":plate}
