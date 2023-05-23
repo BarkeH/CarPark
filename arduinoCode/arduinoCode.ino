@@ -17,7 +17,7 @@ typedef struct{
 }carSpot;
 
 const int numCarParks = 1;
-carSpot spotArray[1] = {{2,3,0,4}};
+carSpot spotArray[1] = {{2,4,0,8}};
 
 void setup() {
   Serial.begin(9600);
@@ -31,8 +31,8 @@ void setup() {
   for (int i = 0; i < numCarParks; i++){
     pinMode(spotArray[i].redLED,OUTPUT);
     pinMode(spotArray[i].greenLED,OUTPUT);
-    digitalWrite(spotArray[i].greenLED, HIGH);
-    digitalWrite(spotArray[i].redLED, LOW);
+    digitalWrite(spotArray[i].greenLED, LOW);
+    digitalWrite(spotArray[i].redLED, HIGH);
 
     spotArray[i].ultrasonic.attach(spotArray[i].ultraPin,spotArray[i].ultraPin);
   }
@@ -63,11 +63,19 @@ void loop() {
       }else if (data == "close"){
         gateServo.write(0);
       }
+    }else if (dataType == "light"){
+      if (data == "ly"){
+        digitalWrite(spotArray[0].greenLED, HIGH);
+        digitalWrite(spotArray[0].redLED, LOW);
+      }else{
+        digitalWrite(spotArray[0].greenLED, LOW);
+        digitalWrite(spotArray[0].redLED, HIGH);
+      }
     }
     
   }
 
-  for (int i = 0; i < numCarParks; i++){
+  /*for (int i = 0; i < numCarParks; i++){
     
     float distanceCM = convertToCM(spotArray[i].ultrasonic.getDistanceIN());
     //Serial.println("you made it her");
@@ -78,7 +86,7 @@ void loop() {
       digitalWrite(spotArray[i].greenLED, HIGH);
       digitalWrite(spotArray[i].redLED, LOW);
     }
-  }
+  }*/
   
   
   
