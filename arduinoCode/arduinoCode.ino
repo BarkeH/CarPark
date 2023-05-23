@@ -17,7 +17,7 @@ typedef struct{
 }carSpot;
 
 const int numCarParks = 1;
-carSpot spotArray[1] = {{2,4,0,8}};
+carSpot spotArray[2] = {{2,4,0,8},{3,5,0,0}};
 
 void setup() {
   Serial.begin(9600);
@@ -34,7 +34,7 @@ void setup() {
     digitalWrite(spotArray[i].greenLED, LOW);
     digitalWrite(spotArray[i].redLED, HIGH);
 
-    spotArray[i].ultrasonic.attach(spotArray[i].ultraPin,spotArray[i].ultraPin);
+    //spotArray[i].ultrasonic.attach(spotArray[i].ultraPin,spotArray[i].ultraPin);
   }
     
 }
