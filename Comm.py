@@ -6,9 +6,10 @@ ser = serial.Serial('/dev/ttyACM0', 9600, timeout=1)
 ser.reset_input_buffer()
 
 time.sleep(2)
-
+ser.write(b"gate,close\n")
 def getPayment(price):
     ser.write(b"gate,close\n")
+    print(price)
     ser.write(b"pay,$" + str(price).encode('utf-8') + b"\n")
     
     if ser.in_waiting > 0:
@@ -25,10 +26,11 @@ def getPayment(price):
     ser.write(b"pay,\n")
     for i in range(5):
         time.sleep(1)
+        
         if ser.in_waiting > 0:
             line = ser.readline().decode('utf-8').rstrip()
             print(line)
-    
+    ser.write(b"gate,close\n")
     #collect payment code
 
 

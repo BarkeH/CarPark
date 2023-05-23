@@ -9,7 +9,7 @@ import time
 import Comm, mongoHandler
 
 timeEntered = 0
-cam = cv2.VideoCapture(0)
+cam = cv2.VideoCapture(2)
 
 carsList = []
     
@@ -63,9 +63,12 @@ while True:
 
         text = pytesseract.image_to_string(cropped4)
         text = re.sub("[^A-Za-z0-9]","",text)
-        text = re.sub("o","0",text)
+        text = text.upper()
+        text = re.sub("O","0",text)
+
         if len(text) != 6:
             continue
+        text = "L306KS"
         cv2.imshow("cropped", cropped)
         print(text)
 
@@ -75,7 +78,7 @@ while True:
             print("exit")
             exists = mongoHandler.getWholeCar(text)
             if exists:
-                totalTime = exists["time"] - time.time()
+                totalTime = time.time() - exists["timeEntered"]
                 owed = int(totalTime/20)
                 Comm.getPayment(owed)
                 mongoHandler.deleteCarByPlate(text)

@@ -9,8 +9,12 @@ def rfidGetCardDetails():
     reader = SimpleMFRC522()
     data = {"success": False}
     try:
+        
         id, text = reader.read()
-        splitted = text.split(",")
+        splitted = text.split(',')
+        print(text)
+        print(splitted)
+        print(len(splitted))
         data = {"success": True, 
                 "cardNumber":splitted[0],
                 "cvv":splitted[1],
@@ -46,15 +50,15 @@ def sendPayment(price):
     data["price"] = price
 
     encryped = dictToEncrypt(publicKey, data)
-    response = requests.post("http://0.0.0.0:5000/api/payment", data={"encrypted":encrypted})
+    
+    response = requests.post("http://0.0.0.0:5000/api/payment", data={"encrypted":encryped})
+    print(response.text)
     return {"success":True, "response":response.text}
 
 if __name__ == '__main__':
     publicKey = getPublicKey()
-    data = {'cardNumber':12345678,
-            'cvv':123,
-            'price':10}
-    
-    encrypted = dictToEncrypt(publicKey, data)
-    response = requests.post("http://0.0.0.0:5000/api/payment", data={"encrypted":encrypted})
-    print(response.text)
+    sendPayment(5)
+
+    #encrypted = dictToEncrypt(publicKey, data)
+    #response = requests.post("http://0.0.0.0:5000/api/payment", data={"encrypted":encrypted})
+    #print(response.text)
