@@ -59,8 +59,10 @@ while True:
             ser.write(b"light,ln\n")
         if right > 25:
             print("right on")
+            ser.write(b"light,ry\n")
         else:
             print("right off")
+            ser.write(b"light,rn\n")
         loops = 0
         right = 0
         left = 0
