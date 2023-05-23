@@ -67,9 +67,15 @@ void loop() {
       if (data == "ly"){
         digitalWrite(spotArray[0].greenLED, HIGH);
         digitalWrite(spotArray[0].redLED, LOW);
-      }else{
+      }else if (data == "ln"){
         digitalWrite(spotArray[0].greenLED, LOW);
         digitalWrite(spotArray[0].redLED, HIGH);
+      }else if (data == "ry"){
+        digitalWrite(spotArray[1].greenLED, HIGH);
+        digitalWrite(spotArray[1].redLED, LOW);
+      }else if (data == "rn"){
+        digitalWrite(spotArray[1].greenLED, LOW);
+        digitalWrite(spotArray[1].redLED, HIGH);
       }
     }
     
