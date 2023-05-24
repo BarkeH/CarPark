@@ -68,7 +68,7 @@ while True:
 
         if len(text) != 6:
             continue
-        text = "L306KS"
+       
         cv2.imshow("cropped", cropped)
         print(text)
 
